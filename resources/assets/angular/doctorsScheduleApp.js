@@ -76,6 +76,7 @@
 			$scope.selectedDoctor = getOneById($scope.doctors, id);
 			// load doctors schedule
 			loadSchedule();
+			$scope.selectedDate = null;
 		};
 
 		$scope.$watch('selectedDate', function (newValue, oldValue) {
@@ -102,14 +103,16 @@
 			$scope.selectedDate = date;
 		};
 
+		/**
+		 * show confirmational modal with all info
+		 * @param event
+		 * @param unix_time
+		 */
 		$scope.preselectConsultation = function(event, unix_time) {
-			console.log(unix_time);
 			unix_time *= 1000;
 			var confirmation = $mdDialog.confirm()
 				.title('Подтвердите информацию')
 				.textContent(' Консультация у врача ' + $scope.selectedDoctor.name +'. Дата: ' + moment(unix_time).format('LLLL'))
-
-				// .ariaLabel('Primary click demo')
 				.ok('Всё верно. Записаться!')
 				.cancel('Отмена')
 				.targetEvent(event);
@@ -130,6 +133,9 @@
 			});
 		};
 
+		/**
+		 * loads schedule for selected doctor
+		 */
 		function loadSchedule () {
 			doctorsApi.getSchedule($scope.selectedDoctor.id).then(function (response) {
 					$scope.available_dates = response.data;
@@ -172,8 +178,6 @@
 				return;
 			}
 
-			console.log(scheduleIntervals, consultationIntervals, intersection);
-
 			for (var i = 0; i < scheduleIntervals.length; i++) {
 				var obj = {
 					time : scheduleIntervals[i],
@@ -191,14 +195,12 @@
 			var step = $scope.selectedDoctor.consult_duration * 60; // *60 - minutes to seconds
 			// generate array of unixdates with interval of doctors consultation duration
 			for (var i = start.unix(); i < end.unix(); i += step) {
-				// console.log(i, step, end.unix(),  i <= end.unix());
 				array.push(i);
 			}
 			return array;
 		}
 
 		function pickScheduleByDate(on_this_day) {
-			console.log(on_this_day);
 			var dateToCompare = moment.utc(on_this_day).startOf('day');
 			var dates = $scope.available_dates; // helping readability
 

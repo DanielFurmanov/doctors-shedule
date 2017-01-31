@@ -10808,9 +10808,9 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 
 		$mdDateLocaleProvider.msgCalendar = 'Календарь';
 		$mdDateLocaleProvider.msgOpenCalendar = 'Открыть календарь';
-	}).controller('doctorsController', ['$scope', '$mdDialog', 'doctorsApi', doctorsController]);
+	}).controller('doctorsController', ['$scope', '$mdDialog', '$mdToast', 'doctorsApi', doctorsController]);
 
-	function doctorsController($scope, $mdDialog, doctorsApi) {
+	function doctorsController($scope, $mdDialog, $mdToast, doctorsApi) {
 		$scope.doctors = [];
 		$scope.selectedDoctor = null;
 		$scope.available_dates = [];
@@ -10826,14 +10826,15 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 		// load doctors on page load
 		doctorsApi.getDoctors().then(function (response) {
 			$scope.doctors = response.data;
+		}, function (response) {
+			systemError();
 		});
 
 		$scope.selectDoctor = function (id) {
 			$scope.selectedDoctor = getOneById($scope.doctors, id);
 			// load doctors schedule
 			loadSchedule();
-
-			loadConsultations(pickScheduleByDate(new Date()));
+			$scope.selectedDate = $scope.available_dates[0];
 		};
 
 		$scope.$watch('selectedDate', function (newValue, oldValue) {
@@ -10858,13 +10859,14 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 			$scope.selectedDate = date;
 		};
 
+		/**
+   * show confirmational modal with all info
+   * @param event
+   * @param unix_time
+   */
 		$scope.preselectConsultation = function (event, unix_time) {
-			console.log(unix_time);
 			unix_time *= 1000;
-			var confirmation = $mdDialog.confirm().title('Подтвердите информацию').textContent(' Консультация у врача ' + $scope.selectedDoctor.name + '. Дата: ' + moment(unix_time).format('LLLL'))
-
-			// .ariaLabel('Primary click demo')
-			.ok('Всё верно. Записаться!').cancel('Отмена').targetEvent(event);
+			var confirmation = $mdDialog.confirm().title('Подтвердите информацию').textContent(' Консультация у врача ' + $scope.selectedDoctor.name + '. Дата: ' + moment(unix_time).format('LLLL')).ok('Всё верно. Записаться!').cancel('Отмена').targetEvent(event);
 
 			$mdDialog.show(confirmation).then(function () {
 				doctorsApi.postConsultation({
@@ -10880,10 +10882,14 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 			});
 		};
 
+		/**
+   * loads schedule for selected doctor
+   */
 		function loadSchedule() {
 			doctorsApi.getSchedule($scope.selectedDoctor.id).then(function (response) {
 				$scope.available_dates = response.data;
-				console.log($scope.available_dates);
+			}, function (response) {
+				systemError();
 			});
 		}
 
@@ -10894,12 +10900,11 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 			$scope.schedule_intervals = [];
 
 			doctorsApi.getConsultations(schedule.id).then(function (response) {
-				console.log('GOT CONSULTATIONS');
 				$scope.consultations = response.data;
 				$scope.schedule_intervals = generateIntervals(start, end);
-				console.log('schedule_intervals GENERATED', $scope.schedule_intervals);
+			}, function (response) {
+				systemError();
 			});
-			// todo alert error if api fails
 		}
 
 		function generateIntervals(start, end) {
@@ -10922,8 +10927,6 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 				return;
 			}
 
-			console.log(scheduleIntervals, consultationIntervals, intersection);
-
 			for (var i = 0; i < scheduleIntervals.length; i++) {
 				var obj = {
 					time: scheduleIntervals[i],
@@ -10941,14 +10944,12 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 			var step = $scope.selectedDoctor.consult_duration * 60; // *60 - minutes to seconds
 			// generate array of unixdates with interval of doctors consultation duration
 			for (var i = start.unix(); i < end.unix(); i += step) {
-				// console.log(i, step, end.unix(),  i <= end.unix());
 				array.push(i);
 			}
 			return array;
 		}
 
 		function pickScheduleByDate(on_this_day) {
-			console.log(on_this_day);
 			var dateToCompare = moment.utc(on_this_day).startOf('day');
 			var dates = $scope.available_dates; // helping readability
 
@@ -10972,7 +10973,12 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 				}
 			}
 
-			// todo throw error here - we found no doctor
+			// error - we found no doctor
+			systemError();
+		}
+
+		function systemError() {
+			$mdToast.show($mdToast.simple().textContent('При запросе произошла ошибка').hideDelay(3000));
 		}
 	}
 })();

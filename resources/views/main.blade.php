@@ -13,23 +13,34 @@
 	{{-- todo  You should create JS files in resources/assets/js, and then mix it by elixir --}}
 	<script src="/js/all.js"></script>
 </head>
-<body ng-app="doctorsScheduleApp" ng-controller="doctorsController">
+<body ng-app="doctorsScheduleApp" ng-controller="doctorsController" ng-cloak>
 	<div layout="row" layout-align="center">
-		<md-content>
+		<md-content flex="40">
 			<md-toolbar>
 				<div class="md-toolbar-tools">
-					<md-button aria-label="Go Back" ng-click="selectedDoctor = null">
+					<md-button ng-show="selectedDoctor" aria-label="Go Back" ng-click="selectedDoctor = null">
 						Назад
 					</md-button>
 					<h2>
 						<span>Запись на приём</span>
 					</h2>
 					<span flex=""></span>
+
+					<md-input-container ng-hide="selectedDoctor" class="md-docs-dark-theme md-input-has-value">
+						<label for="search">Искать по ФИО</label>
+						<input ng-model="searchText"
+							   class="ng-pristine ng-valid md-input ng-not-empty ng-touched"
+							   id="search"
+							   aria-invalid="false"
+						>
+						<div class="md-errors-spacer"></div>
+					</md-input-container>
+
 				</div>
 			</md-toolbar>
 
-			<md-content ng-if="! selectedDoctor">
-				<md-card ng-repeat="doctor in doctors" layout="row">
+			<md-content ng-if="! selectedDoctor" >
+				<md-card ng-repeat="doctor in filteredDoctors = (doctors | filter:searchText)" layout="row">
 					<md-card-title flex="15">
 						<div class="md-media-sm card-media" md-colors="{background: 'default-accent'}">
 							<img ng-src="[[doctor.avatar]]"
@@ -47,6 +58,8 @@
 						<md-button ng-click="selectDoctor([[doctor.id]])">Записаться</md-button>
 					</md-card-actions>
 				</md-card>
+
+				<div ng-show=" ! filteredDoctors.length">Не найдено ни одного врача</div>
 			</md-content>
 
 			<div ng-if="selectedDoctor" style="overflow-x:hidden">
@@ -76,7 +89,7 @@
 				</md-card>
 
 				<md-list>
-					<md-subheader class="md-no-sticky">
+					<md-subheader class="md-no-sticky" ng-show="selectedDate">
 						Дата <b><mydate>[[selectedDate | date:'dd.MM.yyyy']]</mydate></b>.
 						<span  ng-if="schedule_intervals.length">Выберите время:</span>
 					</md-subheader>
