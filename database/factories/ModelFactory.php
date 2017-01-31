@@ -12,13 +12,22 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\User::class, function (Faker\Generator $faker) {
-    static $password;
+use App\Models\Doctor;
 
-    return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
-    ];
+$factory->define(Doctor::class, function () {
+	$faker = Faker\Factory::create('ru_RU'); // create Russian Faker
+	$avatars = [
+		'1.jpg',
+		'2.jpg',
+		'3.jpg',
+		'4.png',
+		'5.jpg',
+		'6.jpg',
+		'7.png',
+	];
+	return [
+		'name' => $faker->name,
+		'avatar' => $faker->randomElement($avatars),
+		'consult_duration' => $faker->randomElement([30, 45, 60]), // simulate different consultation durations
+	];
 });

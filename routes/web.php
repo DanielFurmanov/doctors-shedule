@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Controller@getIndex');
+Route::get('api/doctors', 'Controller@getDoctors');
+Route::get('api/doctor/{doctor_id}/schedule', ['uses' => 'Controller@getSchedule']);
+Route::get('api/schedule/{schedule_id}/consultations', ['uses' => 'Controller@getConsultations']);
+Route::post('api/consultation/create', ['uses' => 'Controller@postConsultation']);
+
