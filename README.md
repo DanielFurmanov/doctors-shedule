@@ -1,40 +1,24 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+## Deploying
+- git clone git@github.com:DanielFurmanov/doctors-shedule.git.
+- copy and edit env.example to .env (mysql credentials)
+- composer install (--no-scripts if necessary).
+- php artisan migrate.
+- npm install.
+- npm run dev.
 
 ## Learning Laravel
-
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
-
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+App consists of one view, one controller and a few models;
+###First screen:
+![first](https://d1ro8r1rbfn3jf.cloudfront.net/ms_72063/SlucAKtolAkcBklAuYyhXmIqafTco0/title.doctors-schedule%2B-%2BGoogle%2BChrome%2B2017-01-31%2B09.53.53.png?Expires=1485932050&Signature=Yftw~yXRk3CrnFvRS2338-pnCu2a1HPtYlwYQ7DbomlxvuNUhD1mDev4~2x2D32O~S4zety49XlRrqUeSoyCyf2lSEbg207-eEBFMnh-hXHFz145M378sQudkONw~q6j-JXUY3EKyzsOsC84vBTJVlaZWLib3acHn-wV5cs1ZyWueetUg~r-ymxXedrrjfcRMc1y2LQvHhGq7y0HyW9WOWVMqfSTY~aADHup3hQtOWgBPkoUtOQC3NZoYSjTIurINtPDj6RFYvAhl9hzS0NribUnkLjO4YZ-5rPt2lvdG9T8cxjMB~2xAyhp7D13JpH8MEO3DP3KIVIyu9vk--kc6Q__&Key-Pair-Id=APKAJHEJJBIZWFB73RSA)
+Options: scroll all over the list, type name in top right input to get filtered results, press "записаться" to get to the second step
+###Second Screen
+![second](https://pp.vk.me/c626130/v626130741/4d5f7/Iqz0GvNzizQ.jpg)
+Options: go back to first screen, choose date from datepicker
+![datepicker](https://pp.vk.me/c626130/v626130741/4d600/XzXu2vDDZWg.jpg)
+When date chosen list of available consultations appears
+![consultations](https://pp.vk.me/c626130/v626130741/4d609/JvwtRq08cDo.jpg)
+When consultation time chosen modal with confirmation popups
+![modal](https://pp.vk.me/c626130/v626130741/4d612/x3I9jjBBkrk.jpg)
+After confirmation, list of consultations refreshes and currently selected time is no more available
+![done](https://pp.vk.me/c626130/v626130741/4d61b/sWzL9xyxHd8.jpg)
