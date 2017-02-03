@@ -110,9 +110,6 @@
 		 */
 		$scope.preselectConsultation = function(event, unix_time) {
 			unix_time *= 1000;
-			console.log(unix_time);
-			console.log(moment(unix_time));
-			console.log(new Date(unix_time));
 			var confirmation = $mdDialog.confirm()
 				.title('Подтвердите информацию')
 				.textContent(' Консультация у врача ' + $scope.selectedDoctor.name +'. Дата: ' + moment(unix_time).format('LLLL'))
@@ -212,12 +209,12 @@
 		}
 
 		function pickScheduleByDate(on_this_day) {
-			var dateToCompare = moment.utc(on_this_day).startOf('day');
+			var dateToCompare = moment(on_this_day).startOf('day');
 			var dates = $scope.available_dates; // helping readability
 
 			for (var i = 0; i < dates.length; i++) {
 				// strip the time from schedule
-				var thatDate = moment.utc(dates[i].start).startOf('day');
+				var thatDate = moment(dates[i].start).startOf('day');
 
 				if (dateToCompare.isSame(thatDate)) {
 					$scope.selectedSchedule = dates[i];

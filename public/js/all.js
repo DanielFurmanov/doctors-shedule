@@ -10958,12 +10958,12 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 		}
 
 		function pickScheduleByDate(on_this_day) {
-			var dateToCompare = moment.utc(on_this_day).startOf('day');
+			var dateToCompare = moment(on_this_day).startOf('day');
 			var dates = $scope.available_dates; // helping readability
 
 			for (var i = 0; i < dates.length; i++) {
 				// strip the time from schedule
-				var thatDate = moment.utc(dates[i].start).startOf('day');
+				var thatDate = moment(dates[i].start).startOf('day');
 
 				if (dateToCompare.isSame(thatDate)) {
 					$scope.selectedSchedule = dates[i];
