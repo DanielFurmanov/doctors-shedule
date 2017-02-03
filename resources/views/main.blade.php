@@ -18,7 +18,7 @@
 		<md-content flex="40">
 			<md-toolbar>
 				<div class="md-toolbar-tools">
-					<md-button ng-show="selectedDoctor" aria-label="Go Back" ng-click="selectedDoctor = null">
+					<md-button ng-show="selectedDoctor" aria-label="Go Back" ng-click="resetAll()">
 						Назад
 					</md-button>
 					<h2>

@@ -10834,7 +10834,7 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 			$scope.selectedDoctor = getOneById($scope.doctors, id);
 			// load doctors schedule
 			loadSchedule();
-			$scope.selectedDate = $scope.available_dates[0];
+			$scope.selectedDate = null;
 		};
 
 		$scope.$watch('selectedDate', function (newValue, oldValue) {
@@ -10880,6 +10880,14 @@ c){var f=a|0,e=c;void 0===e&&(e=Math.min(b(a),3));Math.pow(10,e);return 1==f&&0=
 			}, function () {
 				//
 			});
+		};
+
+		$scope.resetAll = function () {
+			$scope.selectedDoctor = null;
+			$scope.available_dates = [];
+			$scope.message = null;
+			$scope.schedule_intervals = [];
+			$scope.consultations = [];
 		};
 
 		/**

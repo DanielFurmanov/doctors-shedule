@@ -110,6 +110,9 @@
 		 */
 		$scope.preselectConsultation = function(event, unix_time) {
 			unix_time *= 1000;
+			console.log(unix_time);
+			console.log(moment(unix_time));
+			console.log(new Date(unix_time));
 			var confirmation = $mdDialog.confirm()
 				.title('Подтвердите информацию')
 				.textContent(' Консультация у врача ' + $scope.selectedDoctor.name +'. Дата: ' + moment(unix_time).format('LLLL'))
@@ -131,6 +134,14 @@
 			}, function() {
 				//
 			});
+		};
+
+		$scope.resetAll = function() {
+			$scope.selectedDoctor = null;
+			$scope.available_dates = [];
+			$scope.message = null;
+			$scope.schedule_intervals = [];
+			$scope.consultations = [];
 		};
 
 		/**
